@@ -26,3 +26,4 @@ export const ProgressRing: React.FC<{ progress: number; isAscended: boolean }> =
   );
 };
 
+

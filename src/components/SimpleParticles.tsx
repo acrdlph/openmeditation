@@ -39,3 +39,4 @@ export const SimpleParticles: React.FC<{ isAscended: boolean }> = ({ isAscended 
   );
 };
 
+

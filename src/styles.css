@@ -171,3 +171,58 @@ body {
   border-radius: 2px;
   background: var(--fg);
 }
+
+/* ============================ Whales page ============================ */
+body.whales { background: #0a2630; }
+
+#wstage { width: 1440px; height: 1024px; }
+
+/* Generic animated layer (engine sets left/top/width/height/opacity). */
+.wlayer { position: absolute; margin: 0; will-change: left, top, width, height, opacity, transform; }
+
+/* Full-bleed photographic layers (Figma scaleMode FILL). */
+.wfill { object-fit: cover; display: block; pointer-events: none; user-select: none; }
+
+/* Cropped ice-floe layers (Figma scaleMode CROP): inner img positioned in %. */
+.wcrop { overflow: hidden; pointer-events: none; }
+.wcrop img { position: absolute; max-width: none; height: auto; display: block; }
+
+/* Text groups: laid out at a fixed reference width, scaled as a unit by engine. */
+.wtg { transform-origin: 0 0; font-family: "Tenor Sans", Georgia, serif; }
+.wtg.wtitle, .wtitle { margin: 0; font-weight: 400; }
+
+#w_swim { width: 1404px; text-align: center; color: #fff; }
+#w_iceland { width: 1188px; text-align: center; color: #1c617d; }
+#w_menu { width: 1342px; }
+
+.wtitle { font-family: "Tenor Sans", Georgia, serif; font-size: 110px; line-height: 1.04; letter-spacing: 1px; }
+.wtitle-ice { font-size: 82px; }
+
+.wbtn {
+  display: inline-block;
+  margin-top: 34px;
+  padding: 10px 44px;
+  border: 3px solid #fff;
+  border-radius: 12px;
+  font-size: 32px;
+  color: #fff;
+  text-decoration: none;
+}
+.wbtn-ice { border-color: #1c617d; color: #1c617d; }
+
+/* Top nav / logo */
+.wmenu { color: #fff; font-size: 14px; letter-spacing: 1px; height: 60px; }
+.wlogo {
+  position: absolute; left: 50%; top: 0; transform: translateX(-50%);
+  font-size: 33px; letter-spacing: 4px; white-space: nowrap;
+}
+.wnav-l { position: absolute; left: 0; top: 10px; }
+.wnav-r { position: absolute; right: 0; top: 10px; }
+.wmenu nav a { color: #fff; text-decoration: none; white-space: nowrap; }
+.wnav-l a { margin-right: 44px; }
+.wnav-r a { margin-left: 44px; }
+
+/* Mobile Whales menu: centered logo + hamburger. */
+.wmenu-m { width: 393px; height: 59px; }
+.wlogo-m { font-size: 26px; letter-spacing: 3px; }
+.whamb { position: absolute; right: 18px; top: 16px; left: auto; width: 36px; height: 24px; }

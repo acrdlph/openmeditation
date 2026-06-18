@@ -3,23 +3,76 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>openmeditation.io</title>
+    <meta name="description" content="Discover Dolomites — a guided meditation retreat." />
+    <title>Discover Dolomites</title>
   </head>
   <body>
-    <main id="app">
-      <canvas id="world" aria-label="openmeditation.io immersive meditation rooms"></canvas>
+    <!-- Tall spacer drives the scroll-scrubbed timeline (3 transitions). -->
+    <div class="scroll-driver" id="driver"></div>
 
-      <div class="brandmark" aria-label="openmeditation.io">openmeditation.io</div>
+    <main class="viewport">
 
-      <button id="launchButton" class="launch-button" aria-label="Enter" title="Enter">
-        <span class="door-icon" aria-hidden="true"></span>
-      </button>
+      <!-- ===================== DESKTOP STAGE (1571 x 1049) ===================== -->
+      <div class="stage stage-d" id="stage" data-frame-w="1571" data-frame-h="1049">
 
-      <div class="focus-ring" aria-hidden="true">
-        <span></span>
+        <img class="layer sec" id="s1" src="/assets/section2/1.png" alt="" />
+        <img class="layer sec" id="s2" src="/assets/section2/2.png" alt="" />
+        <img class="layer sec" id="s3" src="/assets/section2/3.png" alt="" />
+        <img class="layer sec" id="s4" src="/assets/section2/4.png" alt="" />
+
+        <h2 class="layer headline" id="atnight" data-text>At Night</h2>
+
+        <div class="layer mask" id="mask">
+          <img class="mtn" id="m-sky" src="/assets/cave/sky.png" alt="" />
+          <img class="mtn" id="m-5"   src="/assets/cave/5.png"   alt="" />
+          <img class="mtn" id="m-4"   src="/assets/cave/4.png"   alt="" />
+          <img class="mtn" id="m-3"   src="/assets/cave/3.png"   alt="" />
+          <img class="mtn" id="m-2"   src="/assets/cave/2.png"   alt="" />
+          <img class="mtn" id="m-1"   src="/assets/cave/1.png"   alt="" />
+        </div>
+
+        <h1 class="layer headline" id="discover"  data-text>Discover</h1>
+        <span class="layer headline" id="dolomites" data-text>Dolomites</span>
+
+        <nav class="nav" aria-label="Primary">
+          <a class="nav-item nav-about"   href="#about">About</a>
+          <a class="nav-item nav-team"    href="#team">Out team</a>
+          <a class="logo" href="#" aria-label="Home"><img src="/assets/Logo.png" alt="" class="logo-img" /></a>
+          <a class="nav-item nav-book"    href="#book">Book</a>
+          <a class="nav-item nav-contact" href="#contact">Contact</a>
+        </nav>
       </div>
-      <div class="atmosphere" aria-hidden="true"></div>
+
+      <!-- ===================== MOBILE STAGE (393 x 852) ====================== -->
+      <div class="stage stage-m" id="stage-m" data-frame-w="393" data-frame-h="852">
+
+        <img class="layer sec" id="ms1" src="/assets/section2/1.png" alt="" />
+        <img class="layer sec" id="ms2" src="/assets/section2/2.png" alt="" />
+        <img class="layer sec" id="ms3" src="/assets/section2/3.png" alt="" />
+        <img class="layer sec" id="ms4" src="/assets/section2/4.png" alt="" />
+
+        <h2 class="layer headline" id="m_atnight" data-text>At Night</h2>
+
+        <div class="layer mask" id="m_mask">
+          <img class="mtn" id="mm-sky" src="/assets/cave/sky.png" alt="" />
+          <img class="mtn" id="mm-5"   src="/assets/cave/5.png"   alt="" />
+          <img class="mtn" id="mm-4"   src="/assets/cave/4.png"   alt="" />
+          <img class="mtn" id="mm-3"   src="/assets/cave/3.png"   alt="" />
+          <img class="mtn" id="mm-2"   src="/assets/cave/2.png"   alt="" />
+          <img class="mtn" id="mm-1"   src="/assets/cave/1.png"   alt="" />
+        </div>
+
+        <h1 class="layer headline" id="m_discover"  data-text>Discover</h1>
+        <span class="layer headline" id="m_dolomites" data-text>Dolomites</span>
+
+        <div class="menu">
+          <a class="logo-m" href="#" aria-label="Home"><img src="/assets/Logo.png" alt="" class="logo-img" /></a>
+          <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+        </div>
+      </div>
+
     </main>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

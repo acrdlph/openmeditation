@@ -1,185 +1,173 @@
+/* Discover Dolomites — faithful rebuild of the Figma "Flow Dolomites Desktop".
+   Design tokens taken directly from Figma:
+     background  #0a0f13   (frame fill 0.039,0.059,0.075)
+     text        #cdcdcd   (0.804 grey)
+     font        Inika Regular (self-hosted via @fontsource/inika)
+   The frame is 1571 x 1049. Every layer is absolutely positioned inside .stage
+   in design coordinates; src/main.js scrubs each layer between the four
+   keyframe states. */
+
 :root {
-  color-scheme: dark;
-  --ink: #f7f1e4;
-  --aqua: #8de8d7;
-  --amber: #f5c66f;
-  --leaf: #81c784;
-  --lavender: #c8b7ff;
-  --panel: rgba(8, 14, 18, 0.48);
-  --line: rgba(255, 255, 255, 0.24);
+  --bg: #0a0f13;
+  --fg: #cdcdcd;
+  --frame-w: 1571px;
+  --frame-h: 1049px;
 }
 
-* {
-  box-sizing: border-box;
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Inika", Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-html,
-body,
-#app {
-  width: 100%;
-  height: 100%;
-  margin: 0;
+/* Scroll spacer: 3 transitions, each one viewport tall. Height is finalised in
+   JS (kept in sync with innerHeight) but a sensible default avoids a flash. */
+.scroll-driver { height: 400vh; }
+
+/* Pinned viewport — the scaled stage is centred and stays put while we scroll. */
+.viewport {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(var(--scale, 1));
+  transform-origin: center center;
+  /* Clip to the frame, exactly like a Figma frame. Without this the off-frame
+     layers (the night scene parked below the fold, the headline scaled huge and
+     flown off-screen) spill into view — most visibly on a narrow window where
+     the scaled stage is a short centred band. */
   overflow: hidden;
 }
 
-body {
-  background: #050806;
-  color: var(--ink);
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+/* Fixed design-frame sizes. JS scales the active one to fit and hides the other. */
+.stage-d { width: 1571px; height: 1049px; }
+.stage-m { width: 393px;  height: 852px;  }
+
+.stage[hidden] { display: none; }
+
+/* Generic animated layer: JS sets left/top/width/height/opacity each frame. */
+.layer {
+  position: absolute;
+  margin: 0;
+  will-change: left, top, width, height, opacity;
 }
 
-#app {
-  position: relative;
-}
-
-#world {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
+/* Photographic layers fill their box like Figma's scaleMode = FILL. */
+.sec,
+.mtn {
+  object-fit: cover;
   display: block;
-  cursor: grab;
-}
-
-.brandmark {
-  position: fixed;
-  top: clamp(14px, 2.1vw, 28px);
-  left: clamp(14px, 2.1vw, 28px);
-  z-index: 4;
-  min-height: 34px;
-  display: grid;
-  place-items: center;
-  padding: 0 13px;
-  border: 1px solid var(--line);
-  background: var(--panel);
-  backdrop-filter: blur(18px);
-  color: rgba(247, 241, 228, 0.82);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0;
   pointer-events: none;
-  filter: drop-shadow(0 8px 22px rgba(0, 0, 0, 0.32));
+  user-select: none;
 }
 
-.launch-button {
-  position: fixed;
-  left: 50%;
-  bottom: clamp(32px, 8vh, 86px);
-  z-index: 5;
-  width: 76px;
-  height: 76px;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(245, 198, 111, 0.56);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 48% 44%, rgba(141, 232, 215, 0.2), rgba(11, 17, 15, 0.8) 64%),
-    rgba(6, 10, 9, 0.84);
-  box-shadow:
-    0 0 38px rgba(141, 232, 215, 0.2),
-    inset 0 0 24px rgba(255, 255, 255, 0.08);
-  transform: translateX(-50%);
+/* Cave mask clips the mountain ridge stack to its rectangular window.
+   clip-path inset(1px) pulls the clip a hair inside the overflow box so the
+   fractional-pixel seam created by the stage's CSS scale can't leak the
+   brighter image content sitting just past the bottom edge (the faint white
+   line under the cave hole in state 1). The 1px lands on opaque dark rock, so
+   it costs nothing visible at any zoom level. translateZ(0) puts the mask on
+   its own compositing layer, which keeps the clipped edge crisp while scaling. */
+.mask {
+  overflow: hidden;
+  clip-path: inset(1px);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.mtn { position: absolute; }
+
+/* Headline words. font-size is driven by JS (proportional to layer height).
+   Figma anchors text to the TOP of the box (textAlignVertical: TOP) with AUTO
+   line-height — so we use natural line-height and let the single line sit at the
+   top of the (taller) box, rather than centering it. Centering would drop the
+   glyphs lower and let a giant off-screen headline re-enter from the top edge. */
+.headline {
+  font-weight: 400;
+  line-height: normal;
+  text-align: center;
+  white-space: nowrap;
+  color: var(--fg);
+  overflow: visible;
+}
+
+/* ---------- Navigation (constant across all four states) ---------- */
+.nav { position: absolute; inset: 0; }
+
+.nav-item {
+  position: absolute;
+  top: 104.5px;
+  transform: translate(-50%, -50%);
+  width: 162px;
+  text-align: center;
+  font-size: 26px;
+  line-height: normal;
+  color: var(--fg);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav-item:hover { opacity: 0.7; }
+
+.nav-about   { left: 192px; }
+.nav-team    { left: 362px; }
+.nav-book    { left: 1217px; }
+.nav-contact { left: 1387px; }
+
+.logo {
+  position: absolute;
+  left: 707px;
+  top: 52px;
+  width: 153px;
+  height: 105px;
+  display: block;
+}
+.logo-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+/* ---------- Mobile menu (Logo + hamburger, constant across states) -------- */
+.menu { position: absolute; inset: 0; }
+
+.logo-m {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  width: 87px;
+  height: 59px;
+  display: block;
+}
+
+.hamburger {
+  position: absolute;
+  left: 328px;
+  top: 40px;
+  width: 41px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  background: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   cursor: pointer;
-  transition:
-    opacity 180ms ease,
-    transform 180ms ease,
-    border-color 180ms ease;
 }
-
-.launch-button:hover {
-  border-color: rgba(141, 232, 215, 0.9);
-  transform: translateX(-50%) scale(1.04);
-}
-
-.launch-button.is-hidden {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateX(-50%) translateY(16px) scale(0.92);
-}
-
-.door-icon {
-  position: relative;
-  width: 27px;
-  height: 36px;
-  border: 2px solid var(--ink);
-  border-bottom-width: 3px;
-  border-radius: 14px 14px 3px 3px;
-  box-shadow:
-    0 0 16px rgba(141, 232, 215, 0.58),
-    inset 0 0 12px rgba(245, 198, 111, 0.16);
-}
-
-.door-icon::after {
-  content: "";
-  position: absolute;
-  right: 6px;
-  top: 18px;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--amber);
-  box-shadow: 0 0 10px rgba(245, 198, 111, 0.9);
-}
-
-.focus-ring {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  z-index: 3;
-  width: 54px;
-  height: 54px;
-  border: 1px solid rgba(247, 241, 228, 0.12);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  mix-blend-mode: screen;
-}
-
-.focus-ring::before,
-.focus-ring::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.focus-ring::before {
-  width: 6px;
-  height: 6px;
-  background: rgba(247, 241, 228, 0.66);
-  box-shadow: 0 0 12px rgba(141, 232, 215, 0.45);
-}
-
-.focus-ring::after {
-  width: 28px;
-  height: 28px;
-  border: 1px solid rgba(141, 232, 215, 0.22);
-}
-
-.atmosphere {
-  position: fixed;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background: radial-gradient(circle at 50% 52%, transparent 46%, rgba(2, 5, 4, 0.42) 100%);
-  opacity: 0.88;
-}
-
-@media (max-width: 700px) {
-  .brandmark {
-    top: 12px;
-    left: 12px;
-    min-height: 30px;
-    padding-inline: 11px;
-    font-size: 11px;
-  }
-
-  .launch-button {
-    width: 68px;
-    height: 68px;
-  }
+.hamburger span {
+  display: block;
+  width: 100%;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--fg);
 }

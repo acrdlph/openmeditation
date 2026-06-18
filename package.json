@@ -8,10 +8,10 @@
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1"
   },
-  "dependencies": {
-    "three": "latest"
-  },
   "devDependencies": {
     "vite": "latest"
+  },
+  "dependencies": {
+    "@fontsource/inika": "^5.2.8"
   }
 }

@@ -118,7 +118,8 @@ function fitStage() {
     MODES.m.stage.hidden = mode !== "m";
   }
   const f = MODES[mode];
-  const scale = Math.min(window.innerWidth / f.w, window.innerHeight / f.h);
+  // Cover: fill the viewport (overflow clipped), matching the Whales page.
+  const scale = Math.max(window.innerWidth / f.w, window.innerHeight / f.h);
   f.stage.style.setProperty("--scale", String(scale));
   driver.style.height = (STEPS + 1) * window.innerHeight + "px";
 }

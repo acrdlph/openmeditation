@@ -75,7 +75,7 @@ initScene({
   driverId: "wdriver",
   pickMode: pickByAspect(0.85),
   modes: {
-    d: { stageId: "wstage",   frameW: 1440, frameH: 1024, kf: KF_D, easing: EASE_IN,  durations: [1.2,1.2,1.2,1.5] },
-    m: { stageId: "wstage-m", frameW: 393,  frameH: 852,  kf: KF_M, easing: EASE_OUT, durations: [1,1,1,1] },
+    d: { stageId: "wstage",   frameW: 1440, frameH: 1024, kf: KF_D, easing: EASE_IN,  durations: [1.2,1.2,1.2,1.5], fit: "cover" },
+    m: { stageId: "wstage-m", frameW: 393,  frameH: 852,  kf: KF_M, easing: EASE_OUT, durations: [1,1,1,1], fit: "cover" },
   },
 });

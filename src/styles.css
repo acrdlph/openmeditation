@@ -43,14 +43,14 @@ body {
 
 .stage {
   position: absolute;
-  top: 50%;
+  top: 0;
   left: 50%;
-  transform: translate(-50%, -50%) scale(var(--scale, 1));
-  transform-origin: center center;
-  /* Clip to the frame, exactly like a Figma frame. Without this the off-frame
-     layers (the night scene parked below the fold, the headline scaled huge and
-     flown off-screen) spill into view — most visibly on a narrow window where
-     the scaled stage is a short centred band. */
+  transform: translateX(-50%) scale(var(--scale, 1));
+  transform-origin: top center;
+  /* Clip to the frame, exactly like a Figma frame. Both pages cover-scale to
+     fill the viewport; anchoring to the top keeps the nav visible and clips any
+     vertical overflow at the bottom. Also hides off-frame layers (night scene
+     parked below the fold, headline scaled huge and flown off-screen). */
   overflow: hidden;
 }
 
@@ -176,6 +176,7 @@ body {
 body.whales { background: #0a2630; }
 
 #wstage { width: 1440px; height: 1024px; }
+#wstage-m { width: 393px; height: 852px; }
 
 /* Generic animated layer (engine sets left/top/width/height/opacity). */
 .wlayer { position: absolute; margin: 0; will-change: left, top, width, height, opacity, transform; }

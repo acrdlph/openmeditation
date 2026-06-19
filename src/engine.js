@@ -113,7 +113,9 @@ export function initScene(config) {
     const next = pickMode();
     if (next !== mode) { mode = next; setActive(); }
     const m = modes[mode];
-    const scale = Math.min(window.innerWidth / m.frameW, window.innerHeight / m.frameH);
+    // "contain" (default) letterboxes; "cover" fills the viewport (overflow clipped).
+    const fn = m.fit === "cover" ? Math.max : Math.min;
+    const scale = fn(window.innerWidth / m.frameW, window.innerHeight / m.frameH);
     m.stage.style.setProperty("--scale", String(scale));
     driver.style.height = (modes[mode].total + 1) * window.innerHeight + "px";
   }
